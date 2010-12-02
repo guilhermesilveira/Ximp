@@ -1,0 +1,29 @@
+<script>
+
+function pimp(values, type) {
+	return {"type" : type, "values" : values};
+}
+
+function parse(code) {
+	// definindo um tipo
+	code = code.replace(/an ([a-zA-Z]+)/, "$1 = function(h) { return pimp(h, '$1')}");
+	// atribuindo dentro de hash
+	code = code.replace(/\(([a-zA-Z]+) is (['a-zA-Z\d]+)\)/, "({'$1' : $2})");
+	// atribuindo
+	code = code.replace(/([a-zA-Z_]+) is ([a-zA-Z]+)/, "$1 = $2");
+	// acessando valor
+	code = code.replace(/'s ([a-zA-Z]+)/, "['values']['$1']");
+	// acessando estado
+	code = code.replace(/([_a-zA-Z]+), sup dawg\?/, "console.log($1['type']);console.log($1['values']);");
+	return code;
+}
+
+console.log(eval(parse("an Account")));
+console.log(eval(parse("account is Account (amount is 100)")));
+console.log(eval(parse("account's amount")));
+
+console.log(eval(parse("my_account is Account (owner is 'guilherme')")));
+console.log(eval(parse("my_account's owner")));
+console.log(eval(parse("my_account, sup dawg?")));
+
+</script>
